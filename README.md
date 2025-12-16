@@ -1,8 +1,8 @@
-# Niki
+# Niki – Staff Credit & Loan System
 
-Niki is an internal staff credit and loan management system designed to handle loans, scoring, and eligibility in a transparent and structured way.
+Niki is a backend system for managing staff loans based on performance scoring, eligibility rules, and limited shared credit.
 
-The system is built from real operational needs in a small business environment and focuses on fairness, motivation, and financial responsibility.
+This project is built as a **portfolio project** to explore real-world backend system design around financial logic, fairness, and internal tooling.
 
 ---
 
@@ -10,104 +10,70 @@ The system is built from real operational needs in a small business environment 
 
 Niki allows staff members to:
 
-- View their current credit balance
-- See loans they have taken and repayment status
-- Check whether they are eligible for a new loan
-- Request loans and track approval status
-- See their total score and score breakdown per criteria
+- Accumulate scores based on defined criteria
+- See their total score and how it’s calculated
+- Request loans based on eligibility and limits
+- Repay loans gradually through monthly salary deductions
+- Track loan status, repayments, and remaining balance
 
-Managers can:
-
-- Define scoring criteria and weights
-- Control loan limits and repayment rules
-- Review loan requests
-- Monitor overall system balance and risk
+At the same time, the system enforces clear rules around who can borrow, how much, and when.
 
 ---
 
-## Core Principles
+## Core Ideas
 
-### Loans, not handouts  
-Niki is based on loans that are repaid gradually from salary.
+- **Loans, not handouts**  
+  Money is borrowed and repaid in small monthly installments, preserving dignity and responsibility.
 
-### Gamification for improvement  
-A scoring system based on predefined criteria controls loan eligibility and limits.
+- **Motivation through scoring**  
+  Performance-related criteria contribute to a score that directly affects loan eligibility and limits.
 
-### Fairness and transparency  
-Scores, rules, and decisions are visible and applied consistently.
+- **Fairness and transparency**  
+  Scores, rules, limits, and loan status are visible and predictable for everyone.
 
 ---
 
 ## Competition Model
 
-Niki operates with a limited credit pool.  
-When multiple staff members are eligible for loans, higher scores result in faster access to available credit.
+Niki operates with a **limited shared credit pool**.
 
-This introduces controlled competition without arbitrary decision-making.
-
----
-
-## Scoring System
-
-Each staff member has a total score calculated from weighted criteria such as:
-
-- Work performance and customer interaction
-- Punctuality and attendance
-- Experience and time spent in the organization
-- Task completion and shift responsibilities
-- Learning progress (e.g. reading, vocabulary, training)
-- Discipline and presentation standards
-
-Each criterion has:
-- A weight
-- A scoring range
-- Optional caps and limits
+When multiple people are eligible, those with higher scores can access loans sooner.  
+This introduces controlled competition without removing clarity or fairness.
 
 ---
 
-## Loan Rules
+## Key Features
 
-- Loan eligibility depends on total score
-- Loan limits scale with score
-- Repayment is done automatically through salary deductions
-- Installments are small and interest-free
-- Outstanding loans affect future eligibility
-
----
-
-## Intended Users
-
-- Small businesses
-- Restaurants and service teams
-- Organizations that want structured internal credit systems
-- Teams where motivation and fairness matter more than punishment
+- Weighted scoring system with configurable criteria
+- Eligibility rules for loan access and limits
+- Monthly installment-based repayment logic
+- Loan request and approval workflow
+- Full visibility into scores, loans, and repayment status
+- Admin-defined rules and thresholds
 
 ---
 
-## Tech Direction (Planned)
+## Tech Stack
 
-- Backend-first design
-- Clear domain separation (users, scores, loans, payments)
-- Role-based access (staff vs manager)
-- API-driven architecture
-- Audit-friendly data model
-
-The project is intentionally designed to be simple, explicit, and extensible.
+- **Backend:** Python (FastAPI)
+- **Database:** MongoDB
+- **Architecture:** API-first, domain-oriented design
+- **Auth:** Token-based authentication (planned)
+- **Status:** Early design & development phase
 
 ---
 
-## Status
+## Project Status
 
-🚧 In progress  
-This repository currently focuses on system design, data modeling, and API planning.
+This project is currently in **active design and early implementation**.  
+The focus is on:
 
----
-
-## Why This Project Exists
-
-Niki is built from direct experience managing real teams and real constraints.  
-The goal is not automation for its own sake, but creating a system that is predictable, understandable, and fair.
+- Data modeling
+- Core business rules
+- Clean and maintainable backend structure
 
 ---
 
+## Author
 
+Built by **Yasaman Rohani** as a backend-focused portfolio project.
