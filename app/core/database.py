@@ -2,6 +2,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 
 from app.core.settings import settings
+from app.models.staff import Staff
 
 
 class MongoDatabase:
@@ -13,7 +14,7 @@ class MongoDatabase:
 
         await init_beanie(
             database=self.client[settings.mongodb_db],
-            document_models=[]
+            document_models=[Staff]
         )
 
     async def close(self) -> None:
