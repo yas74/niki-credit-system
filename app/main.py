@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from app.core.settings import settings
 from app.core.database import mongo_db
 from app.api.health import router as health_router
+from app.api.staff import router as staff_router
 
 
 @asynccontextmanager
@@ -25,6 +26,7 @@ def create_app():
     )
 
     app.include_router(health_router)
+    app.include_router(staff_router)
 
     return app
 
