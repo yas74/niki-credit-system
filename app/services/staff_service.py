@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Tuple, List
 from datetime import datetime, timezone
 
 from beanie import PydanticObjectId
@@ -31,6 +31,42 @@ class StaffService:
     async def get_by_id(staff_id: PydanticObjectId) -> Optional[Staff]:
         return await Staff.get(staff_id)
     
+    @staticmethod
+    async def list_staff(
+        *,
+        limit: int = 10,
+        cursor: Optional[PydanticObjectId] = None
+    ) -> Tuple[List[Staff], bool]:
+        """
+        Returns a list of staff ordered by _id ASC using cursor-based pagination.
+
+        :param limit: max number of items to return
+        :param cursor: last seen staff _id
+        :return: (items, has_more)
+        """
+
+        # Enforce upper bound defensively (service-level safety)
+        limit = min(limit, 50)
+
+        query = Staff.find()
+
+        if cursor is not None:
+            query = query.find(Staff.id > cursor)
+
+        items = (
+            await query
+            .sort(Staff.id)
+            .limit(limit + 1)
+            .to_list()
+        )
+
+        has_more = len(items) > limit
+
+        if has_more:
+            items = items[:limit]
+
+        return items, has_more
+
     @staticmethod
     async def update_staff(
         *,

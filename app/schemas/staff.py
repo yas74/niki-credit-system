@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel, Field
 
@@ -15,3 +15,8 @@ class StaffResponse(BaseModel):
     is_active: bool
     created_at: datetime
     updated_at: datetime
+
+class StaffListResponse(BaseModel):
+    items: List[StaffResponse]
+    next_cursor: Optional[str]
+    has_more: bool
