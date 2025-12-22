@@ -1,8 +1,10 @@
-from fastapi import APIRouter, HTTPException, status
+from typing import Optional
+
+from fastapi import APIRouter, HTTPException, status, Query
 from pymongo.errors import DuplicateKeyError
 from beanie import PydanticObjectId
 
-from app.schemas.staff import StaffCreateRequest, StaffResponse
+from app.schemas.staff import StaffCreateRequest, StaffResponse, StaffListResponse
 from app.services.staff_service import StaffService
 
 
@@ -33,6 +35,38 @@ async def create_staff(payload: StaffCreateRequest):
         is_active=staff.is_active,
         created_at=staff.created_at,
         updated_at=staff.updated_at
+    )
+
+@router.get(
+    "/list",
+    response_model=StaffListResponse
+)
+async def list_staff(
+    limit: int = Query(10, ge=1, le=50),
+    cursor: Optional[PydanticObjectId] = Query(None)
+):
+    items, has_more = await StaffService.list_staff(
+        limit=limit,
+        cursor=cursor
+    )
+
+    next_cursor = None
+    if has_more and items:
+        next_cursor = str(items[-1].id)
+
+    return StaffListResponse(
+        items=[
+            StaffResponse(
+                id=str(staff.id),
+                full_name=staff.full_name,
+                employee_code=staff.employee_code,
+                is_active=staff.is_active,
+                created_at=staff.created_at,
+                updated_at=staff.updated_at
+            ) for staff in items
+        ],
+        has_more=has_more,
+        next_cursor=next_cursor
     )
 
 @router.get(
@@ -78,3 +112,4 @@ async def get_staff_by_employee_code(employee_code: str):
         created_at=staff.created_at,
         updated_at=staff.updated_at
     )
+
