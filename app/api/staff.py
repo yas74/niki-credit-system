@@ -113,3 +113,31 @@ async def get_staff_by_employee_code(employee_code: str):
         updated_at=staff.updated_at
     )
 
+@router.patch(
+    "/{staff_id}/deactivate",
+    response_model=StaffResponse
+)
+async def deactivate_staff(staff_id: PydanticObjectId):
+    try:
+        staff = await StaffService.deactivate_staff(staff_id)
+    except ValueError as exc:
+        if str(exc) == "STAFF_NOT_FOUND":
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Staff not found"
+            )
+        if str(exc) == "STAFF_ALREADY_DEACTIVATED":
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Staff is already deactivated",
+            )
+        raise
+
+    return StaffResponse(
+        id=str(staff.id),
+        full_name=staff.full_name,
+        employee_code=staff.employee_code,
+        is_active=staff.is_active,
+        created_at=staff.created_at,
+        updated_at=staff.updated_at,
+    )

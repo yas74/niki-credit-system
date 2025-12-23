@@ -84,3 +84,27 @@ class StaffService:
         await staff.save()
         
         return staff
+
+    @staticmethod
+    async def deactivate_staff(staff_id: PydanticObjectId) -> Staff:
+        """
+        Deactivate (soft-delete) a staff member.
+
+        Rules:
+        - Staff must exist
+        - Staff must be active
+        - Deactivation is NOT idempotent (second call is an error)
+        """
+
+        staff = await Staff.get(staff_id)
+
+        if staff is None:
+            raise ValueError("STAFF_NOT_FOUND")
+        
+        if not staff.is_active:
+            raise ValueError("STAFF_ALREADY_DEACTIVATED")
+        
+        staff.is_active = False
+        await staff.save()
+
+        return staff
