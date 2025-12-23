@@ -20,3 +20,9 @@ class StaffListResponse(BaseModel):
     items: List[StaffResponse]
     next_cursor: Optional[str]
     has_more: bool
+
+class StaffUpdateRequest(BaseModel):
+    full_name: Optional[str] = Field(
+        default=None,
+        min_length=1
+    )
