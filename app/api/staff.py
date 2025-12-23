@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, status, Query
 from pymongo.errors import DuplicateKeyError
 from beanie import PydanticObjectId
 
-from app.schemas.staff import StaffCreateRequest, StaffResponse, StaffListResponse
+from app.schemas.staff import StaffCreateRequest, StaffResponse, StaffListResponse, StaffUpdateRequest
 from app.services.staff_service import StaffService
 
 
@@ -141,3 +141,47 @@ async def deactivate_staff(staff_id: PydanticObjectId):
         created_at=staff.created_at,
         updated_at=staff.updated_at,
     )
+
+@router.patch(
+    "/{staff_id}",
+    response_model=StaffResponse
+)
+async def update_staff(
+    staff_id: PydanticObjectId,
+    payload: StaffUpdateRequest
+):
+    try:
+        staff = await StaffService.update_staff(
+            staff_id, 
+            full_name=payload.full_name
+        )   
+    except ValueError as exc:
+        if str(exc) == "NO_FIELDS_PROVIDED":
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="At least one field must be provided"
+            )
+        
+        if str(exc) == "STAFF_NOT_FOUND":
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Staff not found"
+            )
+        
+        if str(exc) == "STAFF_INACTIVE":
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Inactive staff cannot be updated"
+            )
+        
+        raise
+
+    return StaffResponse(
+        id=str(staff.id),
+        full_name=staff.full_name,
+        employee_code=staff.employee_code,
+        is_active=staff.is_active,
+        created_at=staff.created_at,
+        updated_at=staff.updated_at,
+    )
+        

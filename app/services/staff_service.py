@@ -108,3 +108,37 @@ class StaffService:
         await staff.save()
 
         return staff
+    
+    @staticmethod
+    async def update_staff(
+        staff_id: PydanticObjectId,
+        *,
+        full_name: Optional[str] = None
+    ) -> Staff:
+        """
+        Partially update staff information.
+
+        Rules:
+        - Staff must exist
+        - Staff must be active
+        - At least one field must be provided
+        - Only allowed fields can be updated
+        """
+
+        if full_name is None:
+            raise ValueError("NO_FIELDS_PROVIDED") 
+
+        staff = await Staff.get(staff_id)
+
+        if staff is None:
+            raise ValueError("STAFF_NOT_FOUND")
+        
+        if not staff.is_active:
+            raise ValueError("STAFF_INACTIVE")
+        
+        staff.full_name = full_name
+        await staff.save()
+
+        return staff
+        
+        
