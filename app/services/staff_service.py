@@ -1,12 +1,10 @@
 from typing import Optional, Tuple, List
-from datetime import datetime, timezone
 
 from beanie import PydanticObjectId
 
 from app.models.staff import Staff
+from app.core.time import utc_now
 
-
-UTC_NOW = lambda: datetime.now(timezone.utc)
 
 class StaffService:
     @staticmethod
@@ -80,7 +78,7 @@ class StaffService:
         if is_active is not None:
             staff.is_active = is_active
         
-        staff.updated_at = UTC_NOW()
+        staff.updated_at = utc_now
         await staff.save()
         
         return staff

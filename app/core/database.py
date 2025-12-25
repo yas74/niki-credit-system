@@ -3,6 +3,8 @@ from beanie import init_beanie
 
 from app.core.settings import settings
 from app.models.staff import Staff
+from app.models.user import User
+from app.models.session import Session
 
 
 class MongoDatabase:
@@ -14,7 +16,11 @@ class MongoDatabase:
 
         await init_beanie(
             database=self.client[settings.mongodb_db],
-            document_models=[Staff]
+            document_models=[
+                User,
+                Session,
+                Staff
+            ]
         )
 
     async def close(self) -> None:
