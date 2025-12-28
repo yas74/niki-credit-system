@@ -12,7 +12,7 @@ def create_access_token(
         subject: str,
         expires_delta: timedelta | None = None
 ) -> str:
-    expire = utc_now + (expires_delta or timedelta(minutes=5))
+    expire = utc_now() + (expires_delta or timedelta(minutes=5))
 
     payload: Dict[str, Any] = {
         "sub": subject,
@@ -27,7 +27,7 @@ def create_refresh_token(
         subject: str,
         expires_delta: timedelta | None = None
 ) -> tuple[str, str]:
-    expire = utc_now + (expires_delta or timedelta(days=7))
+    expire = utc_now() + (expires_delta or timedelta(days=7))
     jti = str(uuid4())
 
     payload: Dict[str, Any] = {
