@@ -11,7 +11,7 @@ class Session(Document):
     user_id: PydanticObjectId
 
     refresh_token_hash: str
-    jti: Annotated[str, Indexed(uinque=True)]
+    jti: Annotated[str, Indexed(unique=True)]
 
     created_at: datetime = Field(default_factory=utc_now)
     expires_at: datetime 
