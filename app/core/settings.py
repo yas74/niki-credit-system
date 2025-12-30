@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     access_token_secret: str
     refresh_token_secret: str
 
+    access_token_exp_minutes: int = 15
+    refresh_token_exp_days: int = 7
+
     class Config:
         env_file = ".env"
 

@@ -7,6 +7,7 @@ from app.core.database import mongo_db
 from app.api.health import router as health_router
 from app.api.staff import router as staff_router
 from app.api.auth import router as auth_router
+from app.api.auth_session import router as auth_session_router
 
 
 @asynccontextmanager
@@ -29,6 +30,7 @@ def create_app():
     app.include_router(health_router)
     app.include_router(staff_router)
     app.include_router(auth_router)
+    app.include_router(auth_session_router)
 
     return app
 
