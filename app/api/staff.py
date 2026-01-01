@@ -1,9 +1,11 @@
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, status, Query
+from fastapi import APIRouter, HTTPException, status, Query, Depends
 from pymongo.errors import DuplicateKeyError
 from beanie import PydanticObjectId
 
+from app.models.user import User
+from app.core.security.dependencies import get_current_user, require_superuser
 from app.schemas.staff import StaffCreateRequest, StaffResponse, StaffListResponse, StaffUpdateRequest
 from app.services.staff_service import StaffService
 
@@ -43,7 +45,8 @@ async def create_staff(payload: StaffCreateRequest):
 )
 async def list_staff(
     limit: int = Query(10, ge=1, le=50),
-    cursor: Optional[PydanticObjectId] = Query(None)
+    cursor: Optional[PydanticObjectId] = Query(None),
+    _: User = Depends(get_current_user)
 ):
     items, has_more = await StaffService.list_staff(
         limit=limit,
@@ -117,7 +120,7 @@ async def get_staff_by_employee_code(employee_code: str):
     "/{staff_id}/deactivate",
     response_model=StaffResponse
 )
-async def deactivate_staff(staff_id: PydanticObjectId):
+async def deactivate_staff(staff_id: PydanticObjectId, _: User = Depends(require_superuser)):
     try:
         staff = await StaffService.deactivate_staff(staff_id)
     except ValueError as exc:
