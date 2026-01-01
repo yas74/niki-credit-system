@@ -18,7 +18,7 @@ router = APIRouter(prefix="/staff", tags=["staff"])
     response_model=StaffResponse,
     status_code=status.HTTP_201_CREATED,
 )
-async def create_staff(payload: StaffCreateRequest):
+async def create_staff(payload: StaffCreateRequest, _: User = Depends(require_superuser)):
     try:
         staff = await StaffService.create_staff(
             full_name=payload.full_name,
@@ -76,7 +76,7 @@ async def list_staff(
     "/{staff_id}",
     response_model=StaffResponse
 )
-async def get_staff_by_id(staff_id: PydanticObjectId):
+async def get_staff_by_id(staff_id: PydanticObjectId, _: User = Depends(get_current_user)):
     staff = await StaffService.get_by_id(staff_id)
 
     if staff is None:
@@ -98,7 +98,7 @@ async def get_staff_by_id(staff_id: PydanticObjectId):
     "",
     response_model=StaffResponse
 )
-async def get_staff_by_employee_code(employee_code: str):
+async def get_staff_by_employee_code(employee_code: str, _: User = get_current_user):
     staff = await StaffService.get_by_employee_code(employee_code)
 
     if staff is None:
@@ -151,7 +151,8 @@ async def deactivate_staff(staff_id: PydanticObjectId, _: User = Depends(require
 )
 async def update_staff(
     staff_id: PydanticObjectId,
-    payload: StaffUpdateRequest
+    payload: StaffUpdateRequest,
+    _: User = Depends(require_superuser)
 ):
     try:
         staff = await StaffService.update_staff(
