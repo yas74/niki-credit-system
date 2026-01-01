@@ -47,3 +47,7 @@ def create_refresh_token(
 def decode_refresh_token(token: str) -> dict:
     # verifies signature + exp automatically
     return jwt.decode(token, settings.refresh_token_secret, algorithms=["HS256"])
+
+def decode_access_token(token: str) -> dict:
+    return jwt.decode(token, settings.access_token_secret, algorithms=["HS256"])
+
